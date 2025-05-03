@@ -1,0 +1,125 @@
+from enum import Enum
+import json
+import os
+from platformdirs import *
+import pathlib
+from yaml import dump, safe_load
+from dataclasses import asdict
+from screen.screen_identifier import ScreenIdentifier
+from models.location import Rect
+from models.worm import Margin
+import pandas as pd
+
+class DocType(Enum):
+    Settings = 1
+    Excel = 2
+    Text =3
+    Json = 4
+
+# class DocFormat(Enum):
+#     Excel = 1
+#     Text =2
+#     Json = 3
+
+class DocumentService:
+    def __init__(self) -> None:
+        self._excel_file_row = {}
+
+    def save(self,type:DocType, data, **kwargs):
+        if type == DocType.Settings:
+            path = user_config_dir("MiceGuru")
+            pathlib.Path(path).mkdir(parents=True,exist_ok=True)
+            with open(f"{path}/settings.yml","w+") as file:
+                dump_data = self.normlize_locations(data)
+                margin = kwargs.get("margin",None)
+                if margin is not None:
+                    dump_data.update({"Margin":asdict(margin)})
+                dump(dump_data, file, default_flow_style=False)  
+        elif type == DocType.Text:
+            self.save_text(data)
+        elif type == DocType.Excel:
+            self.save_excel(data)
+        elif type == DocType.Json:
+            f = kwargs.get("file", None)
+            if f is not None:
+                self.save_json(data, f)
+
+    def load(self,type:DocType, **kwargs):
+        if type == DocType.Settings:
+            path = user_config_dir("MiceGuru")
+            try:
+                with open(f"{path}/settings.yml") as file:
+                    data = safe_load(file)
+                    return self.denormlize_locations(data)
+            except FileNotFoundError:
+                return {}, None
+        elif type == DocType.Json:
+            f = kwargs.get("file", None)
+            print(f)
+            if f is not None:
+                if os.path.exists(f):
+                    with open(f, "r") as file:
+                        return json.load(file)
+                return None
+
+    @staticmethod
+    def save_json(data, file):
+        with open(file,"w+") as f:
+            json.dump(data, f)
+    
+    @staticmethod
+    def save_text(data):
+        report = data.report
+        carbin = data.carbin
+        output = data.file
+        with open(f"{output}.txt","a+") as file:
+            left_mean,right_mean,binary_mean = carbin.worm.cells[0].mean_density
+            file.write(f"{carbin.time:<10.6f}  {binary_mean:<10.6f}   {left_mean:<14.6f}  {right_mean:<14.6f} {report.speed:<14.6f}  {carbin.worm.track.x:<14.6f} {carbin.worm.track.y:<14.6f}\n")
+   
+    def save_excel(self,data):
+        report = data.report
+        carbin = data.carbin
+        output = f"{data.file}.xlsx"
+        if output not in self._excel_file_row:
+            self._excel_file_row[output] = 1
+        if len(carbin.worm.cells)>0:
+            left_mean,right_mean,binary_mean = carbin.worm.cells[0].mean_density
+            ratio = left_mean/right_mean
+        else:
+            left_mean=right_mean=ratio = -1.0
+        if os.path.exists(output):
+            with pd.ExcelWriter(output, engine="openpyxl",mode="a", if_sheet_exists="overlay") as writer:
+                df = pd.DataFrame([[carbin.time,ratio,left_mean,right_mean,report.speed,carbin.worm.track.x,carbin.worm.track.y]])
+                self._excel_file_row[output] = self._excel_file_row[output]+1
+                df.to_excel(writer,sheet_name="Sheet1", index=False, header=False,startrow=self._excel_file_row[output])
+        else:
+            with pd.ExcelWriter(output, engine="openpyxl",mode="w") as writer:
+                df = pd.DataFrame([[carbin.time,ratio,left_mean,right_mean,report.speed,carbin.worm.track.x,carbin.worm.track.y]],
+                                  columns=["Time", "ratio","L_ratio", "R_ratio", "Speed", "X", "Y"])
+                df.to_excel(writer,sheet_name="Sheet1", index=False)
+
+    @staticmethod
+    def normlize_locations(data):
+        norm_data ={}
+        for loc in data:
+            norm_data[loc.name] =asdict(data[loc])
+        return norm_data
+    
+    @staticmethod
+    def denormlize_locations(data):
+        if data is None:
+            return {}, None
+        denorm_data ={}
+        margin_data = None
+        if "Margin" in data:
+            margin_data = Margin(**data["Margin"])
+            del data["Margin"]
+        for loc in data:
+            denorm_data[ScreenIdentifier[loc]] =Rect(**data[loc])
+        return denorm_data, margin_data
+
+
+if __name__ == "__main__":
+    ds = DocumentService()
+    print(ds.load(DocType.Settings))
+
