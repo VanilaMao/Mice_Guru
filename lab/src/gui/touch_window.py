@@ -30,6 +30,7 @@ class TouchWindow(QWidget):
         self.setWindowTitle("Touch Window")
         layout = QVBoxLayout()
         self._button= TouchButton(lambda: self.geometry().y() - self.frameGeometry().y())
+        self._button.setStyleSheet("QPushButton { border: none; }")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(1)

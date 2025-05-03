@@ -23,8 +23,9 @@ class SimpleDrawWidget(QWidget):
                 painter.drawEllipse(point.x, point.y, 1, 1)
             self._draw_all_points = False
         else:
-            last = self._dots[-1]
-            painter.drawEllipse(last.x, last.y, 1, 1)
+            if len(self._dots)>0:
+                last = self._dots[-1]
+                painter.drawEllipse(last.x, last.y, 1, 1)
         if self.draw_sperator:
             painter.drawLine(self.width()/2,0,self.width()/2,self.height())
         painter.end()
