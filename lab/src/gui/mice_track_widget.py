@@ -23,7 +23,7 @@ class Ui_Widget(object):
     def setupUi(self, Widget):
         if not Widget.objectName():
             Widget.setObjectName(u"Widget")
-        Widget.resize(800, 600)
+        Widget.resize(827, 600)
         self.verticalLayout = QVBoxLayout(Widget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -93,14 +93,14 @@ class Ui_Widget(object):
 
         self.verticalLayout.addWidget(self.label)
 
-        self.horizontalLayout_5 = QHBoxLayout()
-        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.Label_2 = QLabel(Widget)
         self.Label_2.setObjectName(u"Label_2")
         sizePolicy.setHeightForWidth(self.Label_2.sizePolicy().hasHeightForWidth())
         self.Label_2.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_5.addWidget(self.Label_2)
+        self.horizontalLayout_3.addWidget(self.Label_2)
 
         self.TouchWidth = QLineEdit(Widget)
         self.TouchWidth.setObjectName(u"TouchWidth")
@@ -109,43 +109,60 @@ class Ui_Widget(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.TouchWidth.sizePolicy().hasHeightForWidth())
         self.TouchWidth.setSizePolicy(sizePolicy1)
+        self.TouchWidth.setMaximumSize(QSize(60, 16777215))
 
-        self.horizontalLayout_5.addWidget(self.TouchWidth)
+        self.horizontalLayout_3.addWidget(self.TouchWidth)
 
         self.Label_1 = QLabel(Widget)
         self.Label_1.setObjectName(u"Label_1")
         sizePolicy.setHeightForWidth(self.Label_1.sizePolicy().hasHeightForWidth())
         self.Label_1.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_5.addWidget(self.Label_1)
+        self.horizontalLayout_3.addWidget(self.Label_1)
 
         self.TouchHeight = QLineEdit(Widget)
         self.TouchHeight.setObjectName(u"TouchHeight")
         sizePolicy1.setHeightForWidth(self.TouchHeight.sizePolicy().hasHeightForWidth())
         self.TouchHeight.setSizePolicy(sizePolicy1)
+        self.TouchHeight.setMaximumSize(QSize(60, 16777215))
 
-        self.horizontalLayout_5.addWidget(self.TouchHeight)
+        self.horizontalLayout_3.addWidget(self.TouchHeight)
+
+        self.label_5 = QLabel(Widget)
+        self.label_5.setObjectName(u"label_5")
+        sizePolicy1.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+        self.label_5.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_3.addWidget(self.label_5)
+
+        self.PatternSeparator = QLineEdit(Widget)
+        self.PatternSeparator.setObjectName(u"PatternSeparator")
+        sizePolicy1.setHeightForWidth(self.PatternSeparator.sizePolicy().hasHeightForWidth())
+        self.PatternSeparator.setSizePolicy(sizePolicy1)
+        self.PatternSeparator.setMaximumSize(QSize(60, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.PatternSeparator)
 
         self.Apply = QPushButton(Widget)
         self.Apply.setObjectName(u"Apply")
         sizePolicy1.setHeightForWidth(self.Apply.sizePolicy().hasHeightForWidth())
         self.Apply.setSizePolicy(sizePolicy1)
 
-        self.horizontalLayout_5.addWidget(self.Apply)
+        self.horizontalLayout_3.addWidget(self.Apply)
 
         self.Clear = QPushButton(Widget)
         self.Clear.setObjectName(u"Clear")
         sizePolicy1.setHeightForWidth(self.Clear.sizePolicy().hasHeightForWidth())
         self.Clear.setSizePolicy(sizePolicy1)
 
-        self.horizontalLayout_5.addWidget(self.Clear)
+        self.horizontalLayout_3.addWidget(self.Clear)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_5.addItem(self.horizontalSpacer_2)
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout_5)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
 
         self.Track = QWidget(Widget)
         self.Track.setObjectName(u"Track")
@@ -171,6 +188,7 @@ class Ui_Widget(object):
         self.label.setText(QCoreApplication.translate("Widget", u"Touch Screen Resolution", None))
         self.Label_2.setText(QCoreApplication.translate("Widget", u"Width:", None))
         self.Label_1.setText(QCoreApplication.translate("Widget", u"Height:", None))
+        self.label_5.setText(QCoreApplication.translate("Widget", u"Pattern Separator:", None))
         self.Apply.setText(QCoreApplication.translate("Widget", u"Apply", None))
         self.Clear.setText(QCoreApplication.translate("Widget", u"Clear", None))
     # retranslateUi
