@@ -19,7 +19,7 @@ class MiceTrack(Ui_Widget, QWidget, Serializable):
         self._data = []
         self._resolution_height = 600
         self._resolution_width = 800
-        self._pattern_separator = 400
+        self._pattern_separator = -1
         self._left_count = 0
         self._right_count = 0
 
